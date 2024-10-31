@@ -1,3 +1,3 @@
 <template>
-    <p>Main Page</p>
+   <p>Edit Page</p>
 </template>
