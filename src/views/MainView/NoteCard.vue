@@ -66,7 +66,7 @@ article {
     font-size: 2.3em;
     height: 3.5rem;
     width: 3.5rem;
-    border-radius: 0.6rem;
+    border-radius: 0.8rem;
 }
 
 #manage p {
@@ -84,8 +84,5 @@ article {
     font-size: 2em;
     cursor: pointer;
 }
-
-
-
 
 </style>
