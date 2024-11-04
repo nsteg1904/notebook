@@ -12,12 +12,12 @@
             </div>
             <div class="description">
                 <label for="description">Description</label>
-                <textarea 
+                <textarea
                     id="description" 
                     type="text" 
                     placeholder="Description..."
                     v-model="description"
-                />
+                ></textarea> 
             </div>
             <CustomButton 
                 @click.prevent="saveNote" 
@@ -28,33 +28,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineProps, computed } from 'vue';
 import { useNoteStore } from '@/stores/NoteStore';
 import { useRouter } from 'vue-router';
 import CustomButton from '@/components/CustomButton.vue';
 import Note from '@/types/Note';
 
-const title = ref<string>('');
-const description = ref<string>('');
-
+// Initialize the note store and router
 const noteStore = useNoteStore();
-
 const router = useRouter();
 
-const generateUniqueId = (): number => Math.floor(Date.now() * 1000)
+// Define component props with optional note ID
+const props = defineProps<{id?: string}>();
 
+// Compute the note ID based on props or default to an empty string
+const noteId = computed(() => props.id ? props.id : '');
+
+// Compute the current note based on the note ID
+const note = computed(() => noteStore.getNoteById(noteId.value));
+
+const title = ref<string>(note.value?.title || '');
+const description = ref<string>(note.value?.description || '');
+
+// Generate a unique ID
+const generateUniqueId = (): string => crypto.randomUUID();
+
+// Function to save the note, either as a new note or an updated one
 const saveNote = () => {
-    if(title.value !== '' || description.value !== ''){
-        const newNode: Note = {
-            id: generateUniqueId(),
-            date: new Date(Date.now()),
-            icon: 'check_box',
-            title: title.value,
-            description: description.value
+
+    // Check if title and description are filled out
+    if (title.value !== '' && description.value !== ''){
+
+        if(note.value) { // If a note already exists, update it
+            const updatedNote: Note = {
+                ...note.value,
+                title: title.value,
+                description: description.value
+            }
+            noteStore.editNote(updatedNote, noteId.value)
+
+        } else { // If no note exists, create a new one
+            const newNode: Note = {
+                id: generateUniqueId(), // Generate a unique ID
+                date: new Date(Date.now()), // Set the current date
+                icon: 'check_box', // Default icon
+                title: title.value,
+                description: description.value
+            }
+            noteStore.createNote(newNode); // Create the new note in the store
         }
-    
-        noteStore.createNote(newNode);
-        router.push('/');
+
+        router.push('/'); // Navigate back to the main page
+        
     } else {
         alert('Please fill in both the Title and Description fields before proceeding!');
     }
@@ -79,7 +104,7 @@ input, textarea {
     padding: 1rem;
     border: none;
     color: #f6f7f7;
-    font-weight: 1.1em;
+    font-size: 1.1em;
 }
 
 input:focus, textarea:focus {
@@ -89,7 +114,7 @@ input:focus, textarea:focus {
 
 textarea {
     resize: vertical;
-    height: 8rem;
+    height: 9rem;
 }
 
 form div {

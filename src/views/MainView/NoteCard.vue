@@ -11,7 +11,7 @@
             <p>{{ convertDate }}</p>
             <div>
                 <i class="material-icons-outlined" @click.prevent="noteStore.deleteNote(note.id)">delete</i>
-                <i class="material-icons-outlined" @click.prevent="$router.push('/editNote')">edit_note</i>
+                <i class="material-icons-outlined" @click.prevent="$router.push(`/editNote/${note.id}`)">edit_note</i>
             </div>
         </div>
     </article>
