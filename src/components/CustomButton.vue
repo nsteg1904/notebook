@@ -17,6 +17,7 @@ button {
     background-color: #1a80e6;
     border: none;
     font: inherit;
+    font-size: 1.2em;
     color: inherit;
     cursor: pointer;
     padding: 0.35rem 0.7rem;

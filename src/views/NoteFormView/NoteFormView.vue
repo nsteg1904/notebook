@@ -1,7 +1,7 @@
 <template>
     <form action="">
         <div>
-            <div class="title">
+            <div class="title margin-bottom-2rem">
                 <label for="title">Title</label>
                 <input 
                     id="title" 
@@ -10,7 +10,7 @@
                     v-model="title"
                 >
             </div>
-            <div class="description">
+            <div class="description margin-bottom-2rem">
                 <label for="description">Description</label>
                 <textarea
                     id="description" 
@@ -18,6 +18,14 @@
                     placeholder="Description..."
                     v-model="description"
                 ></textarea> 
+            </div>
+            <div class="icon-picker margin-bottom-2rem">
+                <label>Icon</label>
+                <icon-picker 
+                    :selected-icon="selectedIcon"
+                    :icons="icons"
+                    @change-selected-icon="changeSelectedIcon"
+                />
             </div>
             <CustomButton 
                 @click.prevent="saveNote" 
@@ -32,7 +40,9 @@ import { ref, defineProps, computed } from 'vue';
 import { useNoteStore } from '@/stores/NoteStore';
 import { useRouter } from 'vue-router';
 import CustomButton from '@/components/CustomButton.vue';
+import IconPicker from './IconPicker.vue';
 import Note from '@/types/Note';
+import icons from '@/assets/icons.json'; // JSON-Datei mit Icons
 
 // Initialize the note store and router
 const noteStore = useNoteStore();
@@ -49,6 +59,9 @@ const note = computed(() => noteStore.getNoteById(noteId.value));
 
 const title = ref<string>(note.value?.title || '');
 const description = ref<string>(note.value?.description || '');
+const selectedIcon = ref<string>(note.value?.icon || icons[0]);
+
+const changeSelectedIcon = (iconName: string) => selectedIcon.value = iconName;
 
 // Generate a unique ID
 const generateUniqueId = (): string => crypto.randomUUID();
@@ -62,6 +75,7 @@ const saveNote = () => {
         if(note.value) { // If a note already exists, update it
             const updatedNote: Note = {
                 ...note.value,
+                icon: selectedIcon.value,
                 title: title.value,
                 description: description.value
             }
@@ -71,7 +85,7 @@ const saveNote = () => {
             const newNode: Note = {
                 id: generateUniqueId(), // Generate a unique ID
                 date: new Date(Date.now()), // Set the current date
-                icon: 'check_box', // Default icon
+                icon: selectedIcon.value,
                 title: title.value,
                 description: description.value
             }
@@ -98,18 +112,22 @@ label {
 }
 
 input, textarea {
-    margin-bottom: 2rem;
     border-radius: 0.8rem;
     background-color: #233445;
     padding: 1rem;
     border: none;
     color: #f6f7f7;
-    font-size: 1.1em;
+    font: inherit
+}
+
+input::placeholder, 
+textarea::placeholder {
+    color: #959da5; 
+    opacity: 1; 
 }
 
 input:focus, textarea:focus {
-    outline: none;
-    border: solid #1a80e6
+    outline: solid #1a80e6 0.2rem
 }
 
 textarea {
