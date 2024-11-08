@@ -117,7 +117,8 @@ input, textarea {
     padding: 1rem;
     border: none;
     color: #f6f7f7;
-    font: inherit
+    font: inherit;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3); 
 }
 
 input::placeholder, 
@@ -132,11 +133,14 @@ input:focus, textarea:focus {
 
 textarea {
     resize: vertical;
-    height: 9rem;
+    height: 8rem; 
+    line-height: 1.5; 
 }
 
 form div {
     display: flex;
     flex-direction: column;
 }
+
+
 </style>

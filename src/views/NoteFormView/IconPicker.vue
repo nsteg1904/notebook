@@ -1,13 +1,12 @@
 <template>
     <div class="icon-picker">
-        <div 
-            class="icon-button" 
-            
-        >
-            <button @click.prevent="toggleDropdown" :class="{'selected-icon-button': isDropdownVisable}">
+        <div class="icon-button">
+            <button @click.prevent="toggleDropdown" :class="{'selected-icon-button': isDropdownVisable, 'unselected-icon-button': !isDropdownVisable}">
                 <span>{{isDropdownVisable ? 'Select an Icon' : 'Selected Icon'}} <i class="material-icons-outlined">{{ selectedIcon }}</i></span>
             </button>
         </div>
+
+        
         <div class="icons" v-if="isDropdownVisable">
             <ul class="icon-list">
                 <li v-for="icon in icons" :key="icon"  @click.prevent="changeSelectedIcon(icon)">
@@ -18,6 +17,7 @@
                 </li>
             </ul>
         </div>
+       
     </div>
 </template>
 
@@ -39,20 +39,38 @@ const changeSelectedIcon = (icon: string) => emit('changeSelectedIcon', icon);
 <style scoped>
 
 .selected-icon-button {
-    margin-bottom: 0.9rem;
-    outline: solid #1a80e6 0.2rem;
+    position: relative;
+    border: solid #1a80e6 0.2rem;
+    border-bottom: none;
     color: #f6f7f7;
+    border-radius: 0.8rem 0.8rem 0 0; 
+    margin-bottom: -0.18rem; 
+    z-index: 1; 
 }
+
+.unselected-icon-button {
+    border-radius: 0.8rem;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3); 
+    color: #959da5;
+}
+
+.icons {
+    background-color: #233445;
+    border-radius: 0 0.8rem 0.8rem 0.8rem;
+    padding: 0.1rem;
+    border: solid #1a80e6 0.2rem;
+    margin-top: 0;
+}
+
+
 
 button {
     width: 15rem;
     cursor: pointer;
     background-color: #233445;
     border: none;
-    color: #959da5;
     padding: 0.35rem 0.7rem;
-    border-radius: 0.8rem;
-    font: inherit
+    font: inherit;
 }
 
 button span {
@@ -72,20 +90,13 @@ i {
     outline: solid #1a80e6 0.2rem;
 }
 
-.icons {
-    background-color: #233445;
-    border-radius: 0.8rem;
-    padding: 0.1rem;
-    outline: solid #1a80e6 0.2rem;
-
-}
 
 .icon-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
-    gap: 0.5rem; 
+    gap: 0.55rem; 
     margin: 0 auto; 
-    padding: 0.5rem;
+    padding: 0.65rem;
     max-width: 100%; 
 }
 

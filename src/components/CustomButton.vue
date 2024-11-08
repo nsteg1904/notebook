@@ -22,6 +22,7 @@ button {
     cursor: pointer;
     padding: 0.35rem 0.7rem;
     border-radius: 0.8rem;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3); 
 }
 
 </style>
