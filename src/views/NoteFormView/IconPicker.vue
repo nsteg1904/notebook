@@ -1,12 +1,15 @@
 <template>
     <div class="icon-picker">
+
+        <!-- Button to toggle the dropdown -->
         <div class="icon-button">
             <button @click.prevent="toggleDropdown" :class="{'selected-icon-button': isDropdownVisable, 'unselected-icon-button': !isDropdownVisable}">
                 <span>{{isDropdownVisable ? 'Select an Icon' : 'Selected Icon'}} <i class="material-icons-outlined">{{ selectedIcon }}</i></span>
             </button>
         </div>
 
-        
+        <!-- Dropdown with icons -->
+        <!-- Show the dropdown only if isDropdownVisable is true -->
         <div class="icons" v-if="isDropdownVisable">
             <ul class="icon-list">
                 <li v-for="icon in icons" :key="icon"  @click.prevent="changeSelectedIcon(icon)">
@@ -24,13 +27,17 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
 
+// initialize props and emit
 const props = defineProps<{ selectedIcon: string, icons: string[] }>();
 const emit = defineEmits<{ (e: 'changeSelectedIcon', icon: string): void }>();
 
+// indicate whether the dropdown is visible
 const isDropdownVisable = ref<boolean>(false);
 
+// toggle the visibility of the dropdown
 const toggleDropdown = () => isDropdownVisable.value = !isDropdownVisable.value;
 
+// change the selected icon
 const changeSelectedIcon = (icon: string) => emit('changeSelectedIcon', icon);
 
 

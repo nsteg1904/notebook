@@ -1,13 +1,15 @@
 <template>
   <header>
+    <!-- header with logo and title -->
+    <!-- change view to main page -->
     <div @click.prevent="changeView('/')">
       <i class="material-icons-outlined">event_note</i>
       <h1>Notebook</h1>
     </div>
   </header>
+
   <main>
     <section id="main">
-
       <!-- webseite navigation -->
       <nav>
         <h2>{{ $route.name }}</h2>
@@ -31,11 +33,14 @@ import CustomButton from './components/CustomButton.vue';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+// init router and route
 const route = useRoute();
 const router = useRouter();
 
+// check if the current page is the main page
 const isOnMainPage = computed(() => route.fullPath === '/');
 
+// change view to another page
 const changeView = (path: string): void => {
   router.push(path);
 }
