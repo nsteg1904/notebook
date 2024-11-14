@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import Note from "@/types/Note";
-import { getNotesListener } from "@/firebase/firestoreNotesService";
+import { getNotesListener, addNote, editNote, deleteNote } from "@/firebase/firestoreNotesService";
 
 export const useNoteStore = defineStore('notebookStore', {
     state: () => ({
@@ -29,26 +29,27 @@ export const useNoteStore = defineStore('notebookStore', {
             });
         },
 
+        // Stop listening to notes from the database
+        stopListening() {
+            if (this.unsubscribe) {
+                this.unsubscribe();
+                this.unsubscribe = null;
+            }
+        },
+
         // Create a new note
         createNote(note: Note) {
-            this.notes.push(note);
+            addNote(note);
         },
 
         // Update the note with the given id
         editNote(revisedNote: Note, noteId: string) {
-            const note = this.notes.find((n) => n.id === noteId);
-
-            if (note) {
-                note.title = revisedNote.title;
-                note.description = revisedNote.description;
-                note.date = revisedNote.date;
-                note.icon = revisedNote.icon;
-            }
+            editNote(revisedNote, noteId);
         },
 
         // Delete the note with the given id
         deleteNote(id: string) {
-            this.notes = this.notes.filter(n => n.id !== id);
+            deleteNote(id);
         },
   
     }

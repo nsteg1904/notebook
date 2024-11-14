@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import CustomButton from './components/CustomButton.vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNoteStore } from './stores/NoteStore';
 
@@ -40,8 +40,14 @@ const router = useRouter();
 
 const noteStore = useNoteStore();
 
+// start listening when component is mounted
 onMounted(() => {
   noteStore.startListening();
+});
+
+// stop listening when component is unmounted
+onUnmounted(() => {
+  noteStore.stopListening();
 });
 
 // check if the current page is the main page
