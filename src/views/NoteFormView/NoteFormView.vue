@@ -84,7 +84,7 @@ const saveNote = () => {
         } else { // If no note exists, create a new one
             const newNode: Note = {
                 id: generateUniqueId(), // Generate a unique ID
-                date: new Date(Date.now()), // Set the current date
+                date: Date.now(), // Set the current date
                 icon: selectedIcon.value,
                 title: title.value,
                 description: description.value

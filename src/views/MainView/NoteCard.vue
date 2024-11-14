@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, PropType, ref } from 'vue';
+import { computed, defineProps, PropType, ref, watch } from 'vue';
 import { useNoteStore } from '@/stores/NoteStore';
 import { useRouter } from 'vue-router';
 import Note from '@/types/Note';
@@ -26,6 +26,9 @@ import Note from '@/types/Note';
 // Define props for the note object
 const props = defineProps({ note: { type: Object as PropType<Note>, required: true } });
 const note = ref<Note>(props.note);
+
+// Watch for changes in the note prop
+watch(() => props.note, (newNote) => note.value = newNote);
 
 // Track whether the description is fully shown or truncated
 const isDescriptionExpanded = ref<boolean>(false);
@@ -42,7 +45,7 @@ const deleteNote = () => noteStore.deleteNote(note.value.id);
 const editNote = () => router.push(`/editNote/${note.value.id}`);
 
 // Format the note's date to a human-readable string
-const formattedDate = computed(() => note.value.date.toLocaleDateString("de-DE"));
+const formattedDate = computed(() => new Date(note.value.date).toLocaleDateString("de-DE"));
 
 </script>
 

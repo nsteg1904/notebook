@@ -1,10 +1,12 @@
 <template>
     <!-- note list -->
-    <div v-for="note in notes" :key="note.id">
-        <note-card 
-            :note="note"
-        />
-    </div>
+    <ul>
+        <li v-for="note in notes" :key="note.id">
+            <note-card 
+                :note="note"
+            />
+        </li>
+    </ul>
    
 
 </template>
@@ -18,10 +20,16 @@ import { storeToRefs } from 'pinia';
 const noteStore = useNoteStore();
 
 // Get notes from the store
-const { notes } = storeToRefs(noteStore)
+const { notes } = storeToRefs(noteStore);
+
 
 </script>
 
 <style scoped>
+
+ul, li {
+    list-style-type: none;
+    padding: 0;
+}
 
 </style>

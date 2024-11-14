@@ -30,12 +30,19 @@
 
 <script setup lang="ts">
 import CustomButton from './components/CustomButton.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useNoteStore } from './stores/NoteStore';
 
 // init router and route
 const route = useRoute();
 const router = useRouter();
+
+const noteStore = useNoteStore();
+
+onMounted(() => {
+  noteStore.startListening();
+});
 
 // check if the current page is the main page
 const isOnMainPage = computed(() => route.fullPath === '/');

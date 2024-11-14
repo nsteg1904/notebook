@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import Note from "@/types/Note";
+import { getNotesListener } from "@/firebase/firestoreNotesService";
 
 export const useNoteStore = defineStore('notebookStore', {
     state: () => ({
         // Initialize notes from local storage
-        notes: JSON.parse(localStorage.getItem('notes') || '[]').map((note: any) => ({
-            ...note,
-            date: new Date(note.date) // Convert string date back to Date object
-        })) as Note[]
+        notes: [] as Note[],
+        unsubscribe: null as (() => void) | null
+    
     }),
     getters: {
         // Get the total number of notes
@@ -22,10 +22,16 @@ export const useNoteStore = defineStore('notebookStore', {
         }
     },
     actions: {
+        // Start listening to notes from the database
+        startListening() {
+            this.unsubscribe = getNotesListener((notes: Note[]) => {
+                this.notes = notes;
+            });
+        },
+
         // Create a new note
         createNote(note: Note) {
             this.notes.push(note);
-            this.saveNotes();
         },
 
         // Update the note with the given id
@@ -37,19 +43,13 @@ export const useNoteStore = defineStore('notebookStore', {
                 note.description = revisedNote.description;
                 note.date = revisedNote.date;
                 note.icon = revisedNote.icon;
-                this.saveNotes();
             }
         },
 
         // Delete the note with the given id
         deleteNote(id: string) {
             this.notes = this.notes.filter(n => n.id !== id);
-            this.saveNotes();
         },
-
-        // Save the notes to local storage
-        saveNotes() {
-            localStorage.setItem('notes', JSON.stringify(this.notes));
-        }
+  
     }
 });
